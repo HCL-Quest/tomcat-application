@@ -1,0 +1,35 @@
+name: quest-diagnostics4/tomcat-test
+on:
+  push:
+  workflow_dispatch:
+concurrency:
+  group: "${{ github.ref }}"
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: self-hosted
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v4.1.0
+      with:
+        fetch-depth: 20
+        lfs: true
+    - run: echo -------------mvn build started---------------
+    - run: cp pom.xml /home/syed/java-app
+    - run: cp src/test/java/com/app/example/App.java /home/syed/java-app/src/test/java/com/app/example/
+    - run: cd /home/syed/java-app
+    - run: mvn package
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v4.1.0
+      with:
+        fetch-depth: 20
+        lfs: true
+    - run: echo --------------tomcat deployment started----------------
+    - run: cd /home/syed/java-app
+    - run: cp target/hello-world-1.war /usr/tomcat/apache-tomcat-8.5.100/webapps/
+    - run: "/usr/tomcat/apache-tomcat-8.5.100/bin/shutdown.sh"
+    - run: "/usr/tomcat/apache-tomcat-8.5.100/bin/startup.sh"
