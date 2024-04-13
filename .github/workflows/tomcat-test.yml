@@ -16,6 +16,7 @@ jobs:
         lfs: true
     - run: echo -------------mvn build started---------------
     - run: mvn package
+    - run: cp target/hello-world-1.war /usr/tomcat/apache-tomcat-8.5.100/webapps/
   deploy:
     needs: build
     runs-on: self-hosted
@@ -26,7 +27,5 @@ jobs:
         fetch-depth: 20
         lfs: true
     - run: echo --------------tomcat deployment started----------------
-    - run: cd /home/syed/java-app
-    - run: cp target/hello-world-1.war /usr/tomcat/apache-tomcat-8.5.100/webapps/
     - run: "/usr/tomcat/apache-tomcat-8.5.100/bin/shutdown.sh"
     - run: "/usr/tomcat/apache-tomcat-8.5.100/bin/startup.sh"
