@@ -15,9 +15,6 @@ jobs:
         fetch-depth: 20
         lfs: true
     - run: echo -------------mvn build started---------------
-    - run: cp pom.xml /home/syed/java-app
-    - run: cp src/test/java/com/app/example/App.java /home/syed/java-app/src/test/java/com/app/example/
-    - run: cd /home/syed/java-app
     - run: mvn package
   deploy:
     needs: build
